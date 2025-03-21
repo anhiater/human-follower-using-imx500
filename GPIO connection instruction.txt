@@ -1,0 +1,16 @@
+Your code uses the following GPIO pins:
+
+TRIG_PIN (GPIO 23) – This pin is used to trigger the ultrasonic sensor by sending a short pulse.
+ECHO_PIN (GPIO 24) – This pin receives the reflected pulse from the ultrasonic sensor, allowing the program to calculate the distance.
+
+The Pixhawk is connected via the serial port /dev/serial0, which corresponds to the UART pins on the Raspberry Pi. These pins are:
+
+TX (GPIO 14 / UART0 TXD) – Transmits data from the Raspberry Pi to the Pixhawk.
+RX (GPIO 15 / UART0 RXD) – Receives data from the Pixhawk to the Raspberry Pi.
+GND – A shared ground connection to ensure proper communication.
+Your code initializes this connection with:
+
+python
+Copy
+Edit
+pixhawk = mavutil.mavlink_connection('/dev/serial0', baud=115200)
