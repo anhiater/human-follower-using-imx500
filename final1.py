@@ -12,20 +12,14 @@ import RPi.GPIO as GPIO
 from picamera2 import MappedArray, Picamera2
 from picamera2.devices import IMX500
 from picamera2.devices.imx500 import (NetworkIntrinsics, postprocess_nanodet_detection)
+from gpiozero import DistanceSensor
+from time import sleep
+sensor = DistanceSensor(echo=24, trigger=23, max_distance=4)
 
 # FPS Tracking Variables
 prev_time = time.time()
 fps = 0
-
-def get_distance():
-    """Retrieve the distance from the ultrasonic sensor script."""
-    try:
-        output = subprocess.check_output(['python3', 'us.py'])
-        return float(output.strip())
-    except Exception as e:
-        print(f"Error retrieving distance: {e}")
-        return None
-
+# trig = 23   echo = 24
 class Detection:
     def __init__(self, coords, category, conf, metadata):
         """Create a Detection object, recording the bounding box, category, and confidence."""
@@ -131,9 +125,9 @@ def draw_detections(jobs):
 
                 # Draw label
                 cv2.putText(m.array, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-                distance = get_distance()
+                distance = sensor.distance 
                 if distance is not None:
-                    distance_text = f"Distance: {distance:.2f} cm"
+                    distance_text = f"Distance: {distance:.2f} m"
                     cv2.putText(m.array, distance_text, (15, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
            
             cv2.imshow('IMX500 Person Detection', m.array)
